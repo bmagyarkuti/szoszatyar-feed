@@ -5,33 +5,32 @@ const { expect } = require('chai');
 
 const XmlResourceStream = require('../../lib/xml-resource-stream.js');
 
-const fakeInput = [
-    '<rss version="2.0">',
-        '<channel>',
-            '<title>TITLE</title>',
-            '<link>',
-                'http://www.budling.hu/~kalman/arch/',
-            '</link>',
-            '<description>A "Szószátyár" c. műsor.</description>',
-            '<item>',
-                '<title>2016. december 7.</title>',
-                '<link>',
-                    'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
-                '</link>',
-                '<description>valami?</description>',
-            '</item>',
-            '<item>',
-                '<title>2016. december 14.</title>',
-                '<link>',
-                    'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
-                '</link>',
-                '<description>megvalami?</description>',
-            '</item>',
-        '</channel>',
-    '</rss>'
-]
 const fakeRawInputStream = () => {
-    let fakeInputIterator = fakeInput.entries();
+    const fakeInputIterator = [
+        '<rss version="2.0">',
+            '<channel>',
+                '<title>TITLE</title>',
+                '<link>',
+                    'http://www.budling.hu/~kalman/arch/',
+                '</link>',
+                '<description>A "Szószátyár" c. műsor.</description>',
+                '<item>',
+                    '<title>2016. december 7.</title>',
+                    '<link>',
+                        'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
+                    '</link>',
+                    '<description>valami?</description>',
+                '</item>',
+                '<item>',
+                    '<title>2016. december 14.</title>',
+                    '<link>',
+                        'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
+                    '</link>',
+                    '<description>megvalami?</description>',
+                '</item>',
+            '</channel>',
+        '</rss>'
+    ].entries();
 
     return new Readable({        
         read(size) {
