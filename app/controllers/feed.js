@@ -1,4 +1,5 @@
 'use strict';
+
 const XmlStream = require('xml-stream');
 const request = require('request');
 
