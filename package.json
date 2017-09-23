@@ -1,0 +1,21 @@
+{
+  "name": "szoszatyar-feed-converter",
+  "version": "1.0.0",
+  "description": "This is an iTunes podcast adapter for the Szoszatyar RSS feed.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/**/*.spec.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "koa": "^2.3.0",
+    "koa-router": "^7.2.1",
+    "mocha": "^3.5.3",
+    "supertest": "^3.0.0"
+  },
+  "engines": {
+    "node": "8.x"
+  }
+}
