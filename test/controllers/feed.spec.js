@@ -12,8 +12,11 @@ describe('/api/feed.xml', function() {
          response = await request(server.listen()).get('/feed.rss');  
     });
 
-    it('returns 200 OK', function() {
+    it('returns 200', function() {
         expect(response.status).to.equal(200);
-        expect(response.text).to.equal('OK');
     });
+
+    it('successfully parses podcast title', function() {
+        expect(response.text).to.equal('Szószátyár-archívum');
+    })
 })
