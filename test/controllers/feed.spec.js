@@ -16,7 +16,9 @@ describe('/api/feed.xml', function() {
         expect(response.status).to.equal(200);
     });
 
-    it('successfully parses podcast title', function() {
-        expect(response.text).to.equal('Szószátyár-archívum');
-    })
+    it('responds with empty xml', function() {
+        expect(response.text).to.equal(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        );
+    });
 })

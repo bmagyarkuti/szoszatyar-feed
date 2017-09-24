@@ -1,22 +1,21 @@
 'use strict';
 
-const XmlStream = require('xml-stream');
+const XmlWriter = require('xml-writer');
 const request = require('request');
+const { PassThrough } = require('stream');
 
-const readXmlInputStream = () => new Promise((resolve, reject) => {
-    const rawInputStream = request.get('http://budling.hu/~kalman/arch/popular/szoszatyar/rss.xml');
-    const xmlInputStream = new XmlStream(rawInputStream);
-    let title;
-    xmlInputStream.on('endElement: channel > title', function(elem) {
-        title = elem.$text;
+const getResultStream = () => {
+    const passThrough = new PassThrough();
+    const xmlWriter = new XmlWriter(false, function(string, encoding) {
+        passThrough.write(string, encoding);
     });
-    xmlInputStream.on('end', function() {
-        resolve(title);
-    })
-    xmlInputStream.on('error', reject)
-});
+    xmlWriter.startDocument('1.0', 'UTF-8');
+    passThrough.end();
+    return passThrough;
+} 
 
 module.exports = async function(context) {
-    context.body = await readXmlInputStream();
+    context.type = 'text';
+    context.body = getResultStream();
     context.status = 200;
 }
