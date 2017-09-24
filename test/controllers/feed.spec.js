@@ -20,9 +20,11 @@ describe('/api/feed.xml', function() {
         expect(response.header['content-type']).to.equal('application/xml');
     });
     
-    it('responds with empty xml', function() {
+    it('responds with empty xml and rss', function() {
         expect(response.text).to.equal(
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" version="2.0">' +
+        '</rss>'
         );
     });
 })

@@ -10,6 +10,13 @@ const getResultStream = () => {
         passThrough.write(string, encoding);
     });
     xmlWriter.startDocument('1.0', 'UTF-8');
+    xmlWriter.startElement('rss');
+    xmlWriter.writeAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
+    xmlWriter.writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+    xmlWriter.writeAttribute('xmlns:rawvoice', 'http://www.rawvoice.com/rawvoiceRssModule/');
+    xmlWriter.writeAttribute('version', '2.0');
+    xmlWriter.endDocument();
+    xmlWriter.toString();
     passThrough.end();
     return passThrough;
 } 
