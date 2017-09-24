@@ -4,15 +4,41 @@ const expect = require('chai').expect;
 const request = require('supertest');
 const { parseString } = require('xml2js');
 const config = require('config');
+const sinon = require('sinon');
+const { Readable } = require('stream');
+const XmlResourceStream = require('../../lib/xml-resource-stream.js');
 
 const server = require('../../app/web.js');
 
-describe('/api/feed.xml', function() {
+describe('/feed.xml', function() {
     let response;
+    const item1 = {
+        title: '2016. december 7.',
+        link: 'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
+        description: 'valami?'
+    };
+    const item2 = {
+        title: '2016. december 14.',
+        link: 'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
+        description: 'megvalami?'
+    };
     
+    const fakeXmlResourceStream = new Readable({
+        objectMode: true,
+        read(size) {
+            [item1, item2].forEach(item => this.push(item));
+            this.push(null);
+        }
+    });
+
     before(async function() {
+         sinon.stub(XmlResourceStream, 'create').returns(fakeXmlResourceStream);
          response = await request(server.listen()).get('/feed.rss');  
     });
+
+    after(() => {
+        XmlResourceStream.create.restore();
+    })
 
     it('returns 200', function() {
         expect(response.status).to.equal(200);
@@ -39,7 +65,7 @@ describe('/api/feed.xml', function() {
             });
         });
 
-        let hasSimpleTag = function(tagName) {
+        const hasSimpleTag = function(tagName) {
             expect(response.parsed.rss.channel[0][tagName][0]).to.eql(
                 config.get(tagName)
             );
@@ -54,5 +80,9 @@ describe('/api/feed.xml', function() {
                 config.get('itunes:category')
             );
         });
+
+        it('has first item tag in channel', function() {
+            expect(response.parsed.rss.channel[0].item[0]).to.eql(item1);
+        })
     });
 })
