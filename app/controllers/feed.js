@@ -15,7 +15,7 @@ const getResultStream = () => {
 } 
 
 module.exports = async function(context) {
-    context.type = 'text';
+    context.type = 'application/xml';
     context.body = getResultStream();
     context.status = 200;
 }
