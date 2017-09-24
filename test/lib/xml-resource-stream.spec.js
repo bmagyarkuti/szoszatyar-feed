@@ -62,7 +62,7 @@ describe('Readable stream of specific resource indentifiers', function() {
     
     beforeEach(async function() {
         sinon.stub(request, 'get').returns(fakeRawInputStream());
-        resultArray = await streamToArray(new XmlResourceStream({ url, selector }));        
+        resultArray = await streamToArray(XmlResourceStream.create({ url, selector }));        
     });
 
     afterEach(function() {
