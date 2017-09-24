@@ -19,4 +19,4 @@ const readXmlInputStream = () => new Promise((resolve, reject) => {
 module.exports = async function(context) {
     context.body = await readXmlInputStream();
     context.status = 200;
-} 
+}
