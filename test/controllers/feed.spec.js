@@ -39,11 +39,24 @@ describe('/api/feed.xml', function() {
         });
 
         it('has title tag in channel', function() {
-            expect(response.parsed.rss.channel[0].title[0]).to.eql('Szószátyár-archívum');
+            expect(response.parsed.rss.channel[0].title[0]).to.eql(
+                'Szószátyár-archívum'
+            );
         });
 
         it('has link tag in channel', function() {
-            expect(response.parsed.rss.channel[0].link[0]).to.eql('http://www.budling.hu/~kalman/arch/popular/szoszatyar');
+            expect(response.parsed.rss.channel[0].link[0]).to.eql(
+                'http://www.budling.hu/~kalman/arch/popular/szoszatyar'
+            );
+        });
+
+        it('has description tag in channel', function() {
+            expect(response.parsed.rss.channel[0].description[0]).to.eql(
+                'A Klubrádió "Szószátyár" c. műsorának archívuma.' + 
+                'Figyelem, ez nemhivatalos adapter, melynek célja, hogy iTunesból' + 
+                'és más hasonló programokból is követhetővé váljon a műsor.' +
+                'A szerzői jogokat az eredeti tulajdonosok gyakorolják.'
+            );
         });
     });
 })

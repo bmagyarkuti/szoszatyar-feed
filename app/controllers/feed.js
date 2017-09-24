@@ -39,12 +39,20 @@ const _writeChannel = writer => {
     const channel = writer.startElement('channel');
     writeTitle(channel);
     writeLink(channel);
+    writeDescription(channel);
     channel.endElement();
 }
 
 const writeTitle = writer => writer.startElement('title').text('Szószátyár-archívum').endElement();
 
 const writeLink = writer => writer.startElement('link').text('http://www.budling.hu/~kalman/arch/popular/szoszatyar').endElement();
+
+const writeDescription = writer => writer.startElement('description').text(
+        'A Klubrádió "Szószátyár" c. műsorának archívuma.' + 
+        'Figyelem, ez nemhivatalos adapter, melynek célja, hogy iTunesból' + 
+        'és más hasonló programokból is követhetővé váljon a műsor.' +
+        'A szerzői jogokat az eredeti tulajdonosok gyakorolják.'
+    ).endElement();
 
 module.exports = async function(context) {
     context.type = 'application/xml';
