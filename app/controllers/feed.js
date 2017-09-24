@@ -10,16 +10,18 @@ const getResultStream = () => {
         passThrough.write(string, encoding);
     });
     xmlWriter.startDocument('1.0', 'UTF-8');
-    xmlWriter.startElement('rss');
-    xmlWriter.writeAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
-    xmlWriter.writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
-    xmlWriter.writeAttribute('xmlns:rawvoice', 'http://www.rawvoice.com/rawvoiceRssModule/');
-    xmlWriter.writeAttribute('version', '2.0');
-    xmlWriter.startElement('channel');
-    xmlWriter.startElement('title').text('Szószátyár-archívum');
-
+    let rss = xmlWriter.startElement('rss');
+    rss.writeAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
+    rss.writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+    rss.writeAttribute('xmlns:rawvoice', 'http://www.rawvoice.com/rawvoiceRssModule/');
+    rss.writeAttribute('version', '2.0');
+    let channel = rss.startElement('channel');
+    channel.startElement('title').text('Szószátyár-archívum').endElement();
+    channel.startElement('link').text('http://www.budling.hu/~kalman/arch/popular/szoszatyar').endElement();
+    channel.endElement();
+    rss.endElement();
     xmlWriter.endDocument();
-    xmlWriter.toString();
+    
     passThrough.end();
     return passThrough;
 } 

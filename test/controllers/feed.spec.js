@@ -41,5 +41,9 @@ describe('/api/feed.xml', function() {
         it('has title tag in channel', function() {
             expect(response.parsed.rss.channel[0].title[0]).to.eql('Szószátyár-archívum');
         });
+
+        it('has link tag in channel', function() {
+            expect(response.parsed.rss.channel[0].link[0]).to.eql('http://www.budling.hu/~kalman/arch/popular/szoszatyar');
+        });
     });
 })
