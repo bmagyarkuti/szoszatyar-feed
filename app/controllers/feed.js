@@ -4,7 +4,7 @@ const XmlWriter = require('xml-writer');
 const request = require('request');
 const { PassThrough } = require('stream');
 
-const getResultStream = () => {
+const _getResultStream = () => {
     const passThrough = new PassThrough();
     const xmlWriter = new XmlWriter(false, function(string, encoding) {
         passThrough.write(string, encoding);
@@ -48,6 +48,6 @@ const writeLink = writer => writer.startElement('link').text('http://www.budling
 
 module.exports = async function(context) {
     context.type = 'application/xml';
-    context.body = getResultStream();
+    context.body = _getResultStream();
     context.status = 200;
 }
