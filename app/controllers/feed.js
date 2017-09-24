@@ -9,22 +9,42 @@ const getResultStream = () => {
     const xmlWriter = new XmlWriter(false, function(string, encoding) {
         passThrough.write(string, encoding);
     });
-    xmlWriter.startDocument('1.0', 'UTF-8');
-    let rss = xmlWriter.startElement('rss');
-    rss.writeAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd');
-    rss.writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
-    rss.writeAttribute('xmlns:rawvoice', 'http://www.rawvoice.com/rawvoiceRssModule/');
-    rss.writeAttribute('version', '2.0');
-    let channel = rss.startElement('channel');
-    channel.startElement('title').text('Szószátyár-archívum').endElement();
-    channel.startElement('link').text('http://www.budling.hu/~kalman/arch/popular/szoszatyar').endElement();
-    channel.endElement();
-    rss.endElement();
-    xmlWriter.endDocument();
+    
+    _write(xmlWriter);
     
     passThrough.end();
     return passThrough;
-} 
+}
+
+const _write = writer => {
+    writer.startDocument('1.0', 'UTF-8');
+    _writeRss(writer);
+    writer.endDocument();
+}
+
+const _writeRss = writer => {
+    let rss = _writeRssHeader(writer);
+    _writeChannel(rss);
+    rss.endElement();
+}
+
+const _writeRssHeader = writer => writer
+        .startElement('rss')
+        .writeAttribute('xmlns:itunes', 'http://www.itunes.com/dtds/podcast-1.0.dtd')
+        .writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom')
+        .writeAttribute('xmlns:rawvoice', 'http://www.rawvoice.com/rawvoiceRssModule/')
+        .writeAttribute('version', '2.0');
+
+const _writeChannel = writer => {
+    const channel = writer.startElement('channel');
+    writeTitle(channel);
+    writeLink(channel);
+    channel.endElement();
+}
+
+const writeTitle = writer => writer.startElement('title').text('Szószátyár-archívum').endElement();
+
+const writeLink = writer => writer.startElement('link').text('http://www.budling.hu/~kalman/arch/popular/szoszatyar').endElement();
 
 module.exports = async function(context) {
     context.type = 'application/xml';
