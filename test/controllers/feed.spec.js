@@ -23,6 +23,7 @@ describe('/api/feed.xml', function() {
     
     describe('parsed xml body', function() {
         before(function () {
+            response.parsed = {};
             parseString(response.text, (err, result) => {
                 Object.assign(response.parsed, result);
             });
