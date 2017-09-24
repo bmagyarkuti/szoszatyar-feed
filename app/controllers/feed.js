@@ -41,6 +41,7 @@ const _writeChannel = writer => {
     ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach(tag => {
         writeSimpleTag(tag, channel)
     });
+    channel.startElement('itunes:category').writeAttribute('text', config.get('itunes:category')).endElement();
     channel.endElement();
 }
 

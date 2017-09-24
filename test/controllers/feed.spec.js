@@ -48,5 +48,11 @@ describe('/api/feed.xml', function() {
         ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach((tagName) => {
             it(`has ${tagName} tag in channel`, hasSimpleTag.bind(this, tagName));            
         })
+
+        it('has itunes:category tag in channel', function() {
+            expect(response.parsed.rss.channel[0]['itunes:category'][0].$.text).to.eql(
+                config.get('itunes:category')
+            );
+        });
     });
 })
