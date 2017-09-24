@@ -3,6 +3,7 @@
 const XmlWriter = require('xml-writer');
 const request = require('request');
 const { PassThrough } = require('stream');
+const config = require('config');
 
 const _getResultStream = () => {
     const passThrough = new PassThrough();
@@ -37,22 +38,13 @@ const _writeRssHeader = writer => writer
 
 const _writeChannel = writer => {
     const channel = writer.startElement('channel');
-    writeTitle(channel);
-    writeLink(channel);
-    writeDescription(channel);
+    ['title', 'description', 'link'].forEach(tag => {
+        writeSimpleTag(tag, channel)
+    });
     channel.endElement();
 }
 
-const writeTitle = writer => writer.startElement('title').text('Szószátyár-archívum').endElement();
-
-const writeLink = writer => writer.startElement('link').text('http://www.budling.hu/~kalman/arch/popular/szoszatyar').endElement();
-
-const writeDescription = writer => writer.startElement('description').text(
-        'A Klubrádió "Szószátyár" c. műsorának archívuma.' + 
-        'Figyelem, ez nemhivatalos adapter, melynek célja, hogy iTunesból' + 
-        'és más hasonló programokból is követhetővé váljon a műsor.' +
-        'A szerzői jogokat az eredeti tulajdonosok gyakorolják.'
-    ).endElement();
+const writeSimpleTag = (tag, writer) => writer.startElement(tag).text(config.get(tag)).endElement();
 
 module.exports = async function(context) {
     context.type = 'application/xml';

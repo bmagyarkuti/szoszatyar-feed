@@ -3,6 +3,7 @@
 const expect = require('chai').expect;
 const request = require('supertest');
 const { parseString } = require('xml2js');
+const config = require('config');
 
 const server = require('../../app/web.js');
 
@@ -38,25 +39,14 @@ describe('/api/feed.xml', function() {
             });
         });
 
-        it('has title tag in channel', function() {
-            expect(response.parsed.rss.channel[0].title[0]).to.eql(
-                'Szószátyár-archívum'
+        let hasSimpleTag = function(tagName) {
+            expect(response.parsed.rss.channel[0][tagName][0]).to.eql(
+                config.get(tagName)
             );
-        });
+        };
 
-        it('has link tag in channel', function() {
-            expect(response.parsed.rss.channel[0].link[0]).to.eql(
-                'http://www.budling.hu/~kalman/arch/popular/szoszatyar'
-            );
-        });
-
-        it('has description tag in channel', function() {
-            expect(response.parsed.rss.channel[0].description[0]).to.eql(
-                'A Klubrádió "Szószátyár" c. műsorának archívuma.' + 
-                'Figyelem, ez nemhivatalos adapter, melynek célja, hogy iTunesból' + 
-                'és más hasonló programokból is követhetővé váljon a műsor.' +
-                'A szerzői jogokat az eredeti tulajdonosok gyakorolják.'
-            );
-        });
+        ['title', 'description', 'link'].forEach((tagName) => {
+            it(`has ${tagName} tag in channel`, hasSimpleTag.bind(this, tagName));            
+        })
     });
 })
