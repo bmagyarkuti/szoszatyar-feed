@@ -37,5 +37,9 @@ describe('/api/feed.xml', function() {
                 version: '2.0'
             });
         });
+
+        it('has title tag in channel', function() {
+            expect(response.parsed.rss.channel[0].title[0]).to.eql('Szószátyár-archívum');
+        });
     });
 })

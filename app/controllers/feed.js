@@ -15,6 +15,9 @@ const getResultStream = () => {
     xmlWriter.writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
     xmlWriter.writeAttribute('xmlns:rawvoice', 'http://www.rawvoice.com/rawvoiceRssModule/');
     xmlWriter.writeAttribute('version', '2.0');
+    xmlWriter.startElement('channel');
+    xmlWriter.startElement('title').text('Szószátyár-archívum');
+
     xmlWriter.endDocument();
     xmlWriter.toString();
     passThrough.end();
