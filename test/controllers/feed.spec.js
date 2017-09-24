@@ -45,7 +45,7 @@ describe('/api/feed.xml', function() {
             );
         };
 
-        ['title', 'description', 'link', 'language'].forEach((tagName) => {
+        ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach((tagName) => {
             it(`has ${tagName} tag in channel`, hasSimpleTag.bind(this, tagName));            
         })
     });

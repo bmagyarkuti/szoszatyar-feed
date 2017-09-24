@@ -38,7 +38,7 @@ const _writeRssHeader = writer => writer
 
 const _writeChannel = writer => {
     const channel = writer.startElement('channel');
-    ['title', 'description', 'link', 'language'].forEach(tag => {
+    ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach(tag => {
         writeSimpleTag(tag, channel)
     });
     channel.endElement();

@@ -2,5 +2,6 @@
     "title": "Szószátyár-archívum",
     "link": "http://www.budling.hu/~kalman/arch/popular/szoszatyar",
     "description": "A Klubrádió \"Szószátyár\" c. műsorának archívuma. Figyelem, ez a feed egy nemhivatalos adapter, melynek célja, hogy iTunesból és más hasonló programokból is követhetővé váljon a műsor. A szerzői jogokat az eredeti tulajdonosok gyakorolják, és a műsorban elhangzottakért is ők tartoznak felelősségel.",
-    "language": "hu-hu"
+    "language": "hu-hu",
+    "itunes:explicit": "yes" 
 }
