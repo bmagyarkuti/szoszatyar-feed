@@ -45,7 +45,7 @@ describe('/api/feed.xml', function() {
             );
         };
 
-        ['title', 'description', 'link'].forEach((tagName) => {
+        ['title', 'description', 'link', 'language'].forEach((tagName) => {
             it(`has ${tagName} tag in channel`, hasSimpleTag.bind(this, tagName));            
         })
     });

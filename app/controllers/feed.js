@@ -38,7 +38,7 @@ const _writeRssHeader = writer => writer
 
 const _writeChannel = writer => {
     const channel = writer.startElement('channel');
-    ['title', 'description', 'link'].forEach(tag => {
+    ['title', 'description', 'link', 'language'].forEach(tag => {
         writeSimpleTag(tag, channel)
     });
     channel.endElement();
