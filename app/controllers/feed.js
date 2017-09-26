@@ -10,7 +10,7 @@ module.exports = async function(context) {
         url: 'http://budling.hu/~kalman/arch/popular/szoszatyar/rss.xml',
         selector: 'endElement: channel > item'
     });
-    const podcastTransformStream = new PodcastTransformStream();
+    const podcastTransformStream = PodcastTransformStream.create();
 
     context.type = 'application/xml';
     context.body = inputStream.pipe(podcastTransformStream);

@@ -21,13 +21,16 @@ describe('/feed.xml', function() {
         });
         let fakePodcastTransformStream = 'fakePodcastTransformStream';
         let inputStreamStub = {
-            pipe: sinon.stub().withArgs(fakePodcastTransformStream).returns(fakeTransformStream)
+            pipe: sinon.stub()
+                .withArgs(fakePodcastTransformStream)
+                .returns(fakeTransformStream)
         }
         sinon.stub(XmlResourceStream, 'create').withArgs({
              url: 'http://budling.hu/~kalman/arch/popular/szoszatyar/rss.xml',
             selector: 'endElement: channel > item'
         }).returns(inputStreamStub);
-        sinon.stub(PodcastTransformStream, 'create').returns(fakePodcastTransformStream);
+        sinon.stub(PodcastTransformStream, 'create')
+            .returns(fakePodcastTransformStream);
         
         response = await request(server.listen()).get('/feed.rss');  
     });
