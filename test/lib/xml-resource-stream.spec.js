@@ -55,7 +55,7 @@ const streamToArray = (stream) => {
     });
 };
 
-describe('Readable stream of specific resource indentifiers', function() {
+describe('XmlResourceStream', function() {
     const url = 'some_url';
     const selector = 'endElement: channel > item';
     let resultArray;
