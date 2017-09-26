@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const request = require('supertest');
-const config = require('config');
 const sinon = require('sinon');
 const { Readable } = require('stream');
 const XmlResourceStream = require('../../lib/xml-resource-stream.js');
@@ -29,6 +28,7 @@ describe('/feed.xml', function() {
             selector: 'endElement: channel > item'
         }).returns(inputStreamStub);
         sinon.stub(PodcastTransformStream, 'create').returns(fakePodcastTransformStream);
+        
         response = await request(server.listen()).get('/feed.rss');  
     });
 
