@@ -81,8 +81,8 @@ describe('/feed.xml', function() {
             );
         });
 
-        it.skip('has first item tag in channel', function() {
-            expect(response.parsed.rss.channel[0].item[0]).to.eql(item1);
+        it('has first title tag in channel', function() {
+            expect(response.parsed.rss.channel[0].item[0].title[0]).to.eql(item1.title);
         });
     });
 })

@@ -19,20 +19,18 @@ class TransformStream extends Transform {
         });
     }
 
+    // @todo: handle backpressure
     _transform(chunk, encoding, callback) {
         if (this._isFirst) {
             this._startDocument(this._xmlWriter);
             this._isFirst = false;
-            callback();
-            return;
         }
+        this._writeItem(chunk);
         callback();
     }
 
     _flush(callback) {
-        this._channel.endElement();        
-        this._rss.endElement();        
-        this._xmlWriter.endDocument();
+        this._endDocument();
         this.push(null);
         callback();
     }
@@ -66,6 +64,18 @@ class TransformStream extends Transform {
     _writeSimpleTag(tag, writer) {
         writer.startElement(tag).text(config.get(tag)).endElement();    
     } 
+
+    _endDocument() {
+        this._channel.endElement();
+        this._rss.endElement();
+        this._xmlWriter.endDocument();
+    }
+
+    _writeItem(chunk) {
+        const item = this._xmlWriter.startElement('item');
+        item.startElement('title').text(chunk.title).endElement();
+        item.endElement();
+    }
 }
 
 
