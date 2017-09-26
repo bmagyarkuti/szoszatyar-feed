@@ -32,11 +32,9 @@ describe('PodcastTransformStream', function() {
 
     const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());
     
-    let parsedResult;
-    
+    let parsedResult = {};
     before(async function() {
         let rawStreamOutput = await toString(podcastTransformStream);
-        parsedResult = {}
         parseString(rawStreamOutput, (err, result) => {
             Object.assign(parsedResult, result);
         });
