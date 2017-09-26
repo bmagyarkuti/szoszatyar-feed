@@ -69,6 +69,10 @@ describe('PodcastTransformStream', function() {
         expect(parsedResult.rss.channel[0].item[0].title[0]).to.eql(item1.title);
     });
 
+    it('writes link tag to first item in channel', function() {
+        expect(parsedResult.rss.channel[0].item[0].link[0]).to.eql(item1.link);        
+    });
+
     it('writes title tag to second item in channel', function() {
         expect(parsedResult.rss.channel[0].item[1].title[0]).to.eql(item2.title);
     });
