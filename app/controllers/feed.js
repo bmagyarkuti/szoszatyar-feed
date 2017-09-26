@@ -21,25 +21,30 @@ class TransformStream extends Transform {
 
     _transform(chunk, encoding, callback) {
         if (this._isFirst) {
-            this._writeOpening(this._xmlWriter);
+            this._startDocument(this._xmlWriter);
             this._isFirst = false;
             callback();
             return;
         }
+        callback();
+    }
+
+    _flush(callback) {
+        this._channel.endElement();        
+        this._rss.endElement();        
+        this._xmlWriter.endDocument();
         this.push(null);
         callback();
     }
 
-     _writeOpening(writer) {
+     _startDocument(writer) {
         writer.startDocument('1.0', 'UTF-8');
-        this._writeRss(writer);
-        writer.endDocument();
+        this._startRss(writer);
     }
     
-    _writeRss(writer) {
-        let rss = this._writeRssHeader(writer);
-        this._writeChannel(rss);
-        rss.endElement();
+    _startRss(writer) {
+        this._rss = this._writeRssHeader(writer);
+        this._startChannel(this._rss);
     }
     
     _writeRssHeader(writer) {
@@ -50,13 +55,12 @@ class TransformStream extends Transform {
             .writeAttribute('version', '2.0');
     }
         
-    _writeChannel(writer) {
-        const channel = writer.startElement('channel');
+    _startChannel(writer) {
+        this._channel = writer.startElement('channel');
         ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach(tag => {
-            this._writeSimpleTag(tag, channel)
+            this._writeSimpleTag(tag, this._channel)
         });
-        channel.startElement('itunes:category').writeAttribute('text', config.get('itunes:category')).endElement();
-        channel.endElement();
+        this._channel.startElement('itunes:category').writeAttribute('text', config.get('itunes:category')).endElement();
     }
     
     _writeSimpleTag(tag, writer) {
