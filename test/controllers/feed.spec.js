@@ -84,5 +84,9 @@ describe('/feed.xml', function() {
         it('has first title tag in channel', function() {
             expect(response.parsed.rss.channel[0].item[0].title[0]).to.eql(item1.title);
         });
+
+        it('has second title tag in channel', function() {
+            expect(response.parsed.rss.channel[0].item[1].title[0]).to.eql(item2.title);
+        });
     });
 })
