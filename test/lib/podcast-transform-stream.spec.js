@@ -65,6 +65,18 @@ describe('PodcastTransformStream', function() {
         );
     });
 
+    it('writes title tag to image', function() {
+        expect(parsedResult.rss.channel[0].image[0].title[0]).to.eql(config.get('image.title'));
+    });
+
+    it('writes link tag to image', function() {
+        expect(parsedResult.rss.channel[0].image[0].link[0]).to.eql(config.get('image.link'));
+    });
+
+    it('writes url tag to image', function() {
+        expect(parsedResult.rss.channel[0].image[0].url[0]).to.eql(config.get('image.url'));
+    });
+
     it('writes title tag to first item in channel', function() {
         expect(parsedResult.rss.channel[0].item[0].title[0]).to.eql(item1.title);
     });
