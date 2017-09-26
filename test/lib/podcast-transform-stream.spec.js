@@ -30,7 +30,7 @@ describe('PodcastTransformStream', function() {
         }
     });
 
-    const podcastTransformStream = inputStream.pipe(new PodcastTransformStream);
+    const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());
     
     let parsedResult;
     
@@ -42,7 +42,7 @@ describe('PodcastTransformStream', function() {
         });
     });
 
-    it('has rss header', function() {
+    it('writes rss header', function() {
         expect(parsedResult.rss.$).to.deep.equal({
             'xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
             'xmlns:atom': 'http://www.w3.org/2005/Atom',
@@ -58,20 +58,20 @@ describe('PodcastTransformStream', function() {
     };
 
     ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach((tagName) => {
-        it(`has ${tagName} tag in channel`, hasSimpleTag.bind(this, tagName));            
+        it(`writes ${tagName} tag to channel`, hasSimpleTag.bind(this, tagName));            
     })
 
-    it('has itunes:category tag in channel', function() {
+    it('writes itunes:category tag to channel', function() {
         expect(parsedResult.rss.channel[0]['itunes:category'][0].$.text).to.eql(
             config.get('itunes:category')
         );
     });
 
-    it('has first title tag in channel', function() {
+    it('writes title tag to first item in channel', function() {
         expect(parsedResult.rss.channel[0].item[0].title[0]).to.eql(item1.title);
     });
 
-    it('has second title tag in channel', function() {
+    it('writes title tag to second item in channel', function() {
         expect(parsedResult.rss.channel[0].item[1].title[0]).to.eql(item2.title);
     });
 });

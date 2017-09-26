@@ -2,43 +2,40 @@
 
 const expect = require('chai').expect;
 const request = require('supertest');
-const { parseString } = require('xml2js');
 const config = require('config');
 const sinon = require('sinon');
 const { Readable } = require('stream');
 const XmlResourceStream = require('../../lib/xml-resource-stream.js');
-
+const PodcastTransformStream = require('../../lib/podcast-transform-stream.js');
 const server = require('../../app/web.js');
 
 describe('/feed.xml', function() {
-    let response;
-    const item1 = {
-        title: '2016. december 7.',
-        link: 'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
-        description: 'valami?'
-    };
-    const item2 = {
-        title: '2016. december 14.',
-        link: 'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
-        description: 'megvalami?'
-    };
+    const expectedResponseText = '<?xml version="1.0" encoding="UTF-8"?><example>Some Example</example>';
     
-    const fakeXmlResourceStream = new Readable({
-        objectMode: true,
-        read(size) {
-            [item1, item2].forEach(item => this.push(item));
-            this.push(null);
-        }
-    });
-
+    let response;
     before(async function() {
-         sinon.stub(XmlResourceStream, 'create').returns(fakeXmlResourceStream);
-         response = await request(server.listen()).get('/feed.rss');  
+        let fakeTransformStream = new Readable({
+            read(size) {
+                this.push(expectedResponseText);
+                this.push(null);
+            }
+        });
+        let fakePodcastTransformStream = 'fakePodcastTransformStream';
+        let inputStreamStub = {
+            pipe: sinon.stub().withArgs(fakePodcastTransformStream).returns(fakeTransformStream)
+        }
+        sinon.stub(XmlResourceStream, 'create').withArgs({
+             url: 'http://budling.hu/~kalman/arch/popular/szoszatyar/rss.xml',
+            selector: 'endElement: channel > item'
+        }).returns(inputStreamStub);
+        sinon.stub(PodcastTransformStream, 'create').returns(fakePodcastTransformStream);
+        response = await request(server.listen()).get('/feed.rss');  
     });
 
-    after(() => {
+    after(function() {
         XmlResourceStream.create.restore();
-    })
+        PodcastTransformStream.create.restore();
+    });
 
     it('returns 200', function() {
         expect(response.status).to.equal(200);
@@ -48,45 +45,7 @@ describe('/feed.xml', function() {
         expect(response.header['content-type']).to.equal('application/xml');
     });
     
-    describe('parsed xml body', function() {
-        before(function () {
-            response.parsed = {};
-            parseString(response.text, (err, result) => {
-                Object.assign(response.parsed, result);
-            });
-        });
-
-        it('has rss header', function() {
-            expect(response.parsed.rss.$).to.deep.equal({
-                'xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
-                'xmlns:atom': 'http://www.w3.org/2005/Atom',
-                'xmlns:rawvoice': 'http://www.rawvoice.com/rawvoiceRssModule/',
-                version: '2.0'
-            });
-        });
-
-        const hasSimpleTag = function(tagName) {
-            expect(response.parsed.rss.channel[0][tagName][0]).to.eql(
-                config.get(tagName)
-            );
-        };
-
-        ['title', 'description', 'link', 'language', 'itunes:explicit'].forEach((tagName) => {
-            it(`has ${tagName} tag in channel`, hasSimpleTag.bind(this, tagName));            
-        })
-
-        it('has itunes:category tag in channel', function() {
-            expect(response.parsed.rss.channel[0]['itunes:category'][0].$.text).to.eql(
-                config.get('itunes:category')
-            );
-        });
-
-        it('has first title tag in channel', function() {
-            expect(response.parsed.rss.channel[0].item[0].title[0]).to.eql(item1.title);
-        });
-
-        it('has second title tag in channel', function() {
-            expect(response.parsed.rss.channel[0].item[1].title[0]).to.eql(item2.title);
-        });
+    it('writes stream output to response', function() {
+        expect(response.text).to.eql(expectedResponseText);
     });
-})
+});
