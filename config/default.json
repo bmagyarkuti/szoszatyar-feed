@@ -4,5 +4,8 @@
     "description": "A Klubrádió \"Szószátyár\" c. műsorának archívuma. Figyelem, ez a feed egy nemhivatalos adapter, melynek célja, hogy iTunesból és más hasonló programokból is követhetővé váljon a műsor. A szerzői jogokat az eredeti tulajdonosok gyakorolják, és a műsorban elhangzottakért is ők tartoznak felelősségel.",
     "language": "hu-hu",
     "itunes:explicit": "yes",
-    "itunes:category": "Society &amp; Culture" 
+    "itunes:category": "Society &amp; Culture",
+    "enclosure": {
+        "type": "audio/mpeg"
+    } 
 }

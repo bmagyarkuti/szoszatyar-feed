@@ -79,6 +79,15 @@ describe('PodcastTransformStream', function() {
         );        
     });
 
+    it('writes enclosure tag to first item in channel', function() {
+        expect(parsedResult.rss.channel[0].item[0].enclosure[0].$).to.eql(
+            {
+                url: item1.link,
+                type: config.get('enclosure.type')
+            }
+        );        
+    })
+
     it('writes title tag to second item in channel', function() {
         expect(parsedResult.rss.channel[0].item[1].title[0]).to.eql(item2.title);
     });
