@@ -1,7 +1,5 @@
 'use strict';
 
-'use strict';
-
 const config = require('config');
 const expect = require('chai').expect;
 const { parseString } = require('xml2js');
