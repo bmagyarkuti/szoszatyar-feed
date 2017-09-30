@@ -4,7 +4,9 @@ const config = require('config');
 const expect = require('chai').expect;
 const { parseString } = require('xml2js');
 const { Readable } = require('stream');
+const sinon = require('sinon');
 const toString = require('stream-to-string');
+const request = require('request');
 
 const PodcastTransformStream = require('../../lib/podcast-transform-stream.js');
 
@@ -12,12 +14,14 @@ describe('PodcastTransformStream', function() {
     const item1 = {
         title: '2016. december 7.',
         link: 'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
-        description: 'valami?'
+        description: 'valami?',
+        length: 100
     };
     const item2 = {
         title: '2016. december 14.',
         link: 'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
-        description: 'megvalami?'
+        description: 'megvalami?',
+        length: 200
     };
     
     const inputStream = new Readable({
@@ -27,11 +31,21 @@ describe('PodcastTransformStream', function() {
             this.push(null);
         }
     });
-
-    const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());
     
     let parsedResult = {};
     before(async function() {
+        sinon.stub(request, 'head').callsFake(url => {
+            let fakes = {};
+            fakes[item1.url] = item1.length;
+            fakes[item2.url] = item2.length;
+            return {
+                headers: {
+                    "content-length": fakes[url]
+                }
+            };
+        });
+        
+        const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());    
         let rawStreamOutput = await toString(podcastTransformStream);
         parseString(rawStreamOutput, (err, result) => {
             Object.assign(parsedResult, result);
@@ -93,7 +107,8 @@ describe('PodcastTransformStream', function() {
         expect(parsedResult.rss.channel[0].item[0].enclosure[0].$).to.eql(
             {
                 url: item1.link,
-                type: config.get('enclosure.type')
+                type: config.get('enclosure.type'),
+                length: item1.length
             }
         );        
     })
