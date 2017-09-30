@@ -6,7 +6,7 @@ const { parseString } = require('xml2js');
 const { Readable } = require('stream');
 const sinon = require('sinon');
 const toString = require('stream-to-string');
-const request = require('request');
+const request = require('request-promise-native');
 
 const PodcastTransformStream = require('../../lib/podcast-transform-stream.js');
 
@@ -15,13 +15,13 @@ describe('PodcastTransformStream', function() {
         title: '2016. december 7.',
         link: 'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
         description: 'valami?',
-        length: 100
+        length: '100'
     };
     const item2 = {
         title: '2016. december 14.',
         link: 'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
         description: 'megvalami?',
-        length: 200
+        length: '200'
     };
     
     const inputStream = new Readable({
@@ -36,13 +36,9 @@ describe('PodcastTransformStream', function() {
     before(async function() {
         sinon.stub(request, 'head').callsFake(url => {
             let fakes = {};
-            fakes[item1.url] = item1.length;
-            fakes[item2.url] = item2.length;
-            return {
-                headers: {
-                    "content-length": fakes[url]
-                }
-            };
+            fakes[item1.link] = item1.length;
+            fakes[item2.link] = item2.length;
+            return { "content-length": fakes[url] };
         });
         
         const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());    
