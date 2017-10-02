@@ -21,5 +21,5 @@ describe('MongoWrapper', function() {
             
             return expect(mongoWrapper.connect()).to.be.rejectedWith('invalid port (larger than 65535) with hostname');
         })
-    })
-})
+    });
+});
