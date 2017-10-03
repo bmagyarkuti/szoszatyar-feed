@@ -4,7 +4,7 @@
   "description": "This is an iTunes podcast adapter for the Szoszatyar RSS feed.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/**/*.spec.js"
+    "test": "mocha \"test/**/*.spec.js\""
   },
   "author": "",
   "license": "ISC",
