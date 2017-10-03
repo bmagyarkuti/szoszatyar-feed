@@ -28,6 +28,6 @@ describe('Item', function() {
             it('fetches size from DB', async function() {
                 expect(await Item.fetchOrDownloadSize(itemInDb.name)).to.eql(itemInDb.size);
             });            
-        })
+        });
     })
 });
