@@ -48,6 +48,10 @@ describe('PodcastTransformStream', function() {
         });
     });
 
+    after(function() {
+        request.head.restore();
+    })
+
     it('writes rss header', function() {
         expect(parsedResult.rss.$).to.deep.equal({
             'xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd',
