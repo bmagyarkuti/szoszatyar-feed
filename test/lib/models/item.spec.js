@@ -58,6 +58,6 @@ describe('Item', function() {
                 expect(result[0].name).to.eql(item.name);
                 expect(result[0].size).to.eql(item.size);
             })
-        })
+        });
     })
 });
