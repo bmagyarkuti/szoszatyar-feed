@@ -29,7 +29,7 @@ describe('Item', function() {
                 await itemInDb.save();
             });
             
-            it('fetches size from DB', async function() {
+            it('returns correct size', async function() {
                 expect(await Item.fetchOrDownloadSize(item.name)).to.eql(item.size);
             });            
         });
@@ -45,9 +45,19 @@ describe('Item', function() {
                 request.head.restore();
             })
 
-            it('asks remote server for size', async function() {
+            it('returns correct size', async function() {
                 expect(await Item.fetchOrDownloadSize(item.name)).to.eql(item.size)    
             });
+
+            it('saves data in db', async function() {
+                await Item.fetchOrDownloadSize(item.name);
+
+                const result = await Item.find({name: item.name}); 
+                
+                expect(result.length).to.eql(1);
+                expect(result[0].name).to.eql(item.name);
+                expect(result[0].size).to.eql(item.size);
+            })
         })
     })
 });
