@@ -15,13 +15,20 @@ describe('PodcastTransformStream', function() {
         title: '2016. december 7.',
         link: 'http://www.budling.hu/~kalman/szoszatyar/20161207.mp3',
         description: 'valami?',
-        length: '100'
+        head: {
+            'content-length': '100',
+            'last-modified': 'Sat, 18 Feb 2017 12:33:36 GMT'
+        }
+        
     };
     const item2 = {
         title: '2016. december 14.',
         link: 'http://www.budling.hu/~kalman/szoszatyar/20161214.mp3',
         description: 'megvalami?',
-        length: '200'
+        head: {
+            'content-length': '200',
+            'last-modified': 'Sun, 15 Oct 2017 10:27:23 GMT'
+        }
     };
     
     const inputStream = new Readable({
@@ -35,10 +42,11 @@ describe('PodcastTransformStream', function() {
     let parsedResult = {};
     before(async function() {
         sinon.stub(request, 'head').callsFake(url => {
-            let fakes = {};
-            fakes[item1.link] = item1.length;
-            fakes[item2.link] = item2.length;
-            return { "content-length": fakes[url] };
+            let fakes = {
+                [item1.link]: item1.head,
+                [item2.link]: item2.head
+            };
+            return fakes[url];
         });
         
         const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());    
@@ -108,9 +116,15 @@ describe('PodcastTransformStream', function() {
             {
                 url: item1.link,
                 type: config.get('enclosure.type'),
-                length: item1.length
+                length: item1.head['content-length']
             }
         );        
+    })
+
+    it('writes pubDate tag to first item in channel', function() {
+        expect(parsedResult.rss.channel[0].item[0].pubDate[0]).to.eql(
+            item1.head['last-modified']
+        );
     })
 
     it('writes title tag to second item in channel', function() {
