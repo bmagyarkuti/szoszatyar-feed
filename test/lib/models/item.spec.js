@@ -90,7 +90,7 @@ describe('Item', function() {
                 request.head.restore();
             })
 
-            it('returns correct size', async function() {
+            it('returns correct pubDate', async function() {
                 expect(await Item.fetchOrDownloadPubDate(item.name)).to.eql(item.pubDate)    
             });
 
