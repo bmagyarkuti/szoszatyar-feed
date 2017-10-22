@@ -4,16 +4,15 @@ const config = require('config');
 const request = require('request');
 
 const XmlResourceStream = require('../../lib/xml-resource-stream.js');
-const ItemStream = require('../../lib/itemStream');
+const PipeCreator = require('../../lib/pipeCreator');
 
 module.exports = async function(context) {
     const inputStream = XmlResourceStream.create({
         url: config.get('originalFeedUrl'),
         selector: 'endElement: channel > item'
     });
-    const itemStream = ItemStream.create();
 
     context.type = 'application/xml';
-    context.body = inputStream.pipe(itemStream);
+    context.body = PipeCreator.create(inputStream);
     context.status = 200;
 }
