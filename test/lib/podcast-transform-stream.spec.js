@@ -8,7 +8,7 @@ const sinon = require('sinon');
 const toString = require('stream-to-string');
 const request = require('request-promise-native');
 
-const PodcastTransformStream = require('../../lib/podcast-transform-stream.js');
+const itemStream = require('../../lib/itemStream');
 
 describe('PodcastTransformStream', function() {
     const item1 = {
@@ -49,7 +49,7 @@ describe('PodcastTransformStream', function() {
             return fakes[url];
         });
         
-        const podcastTransformStream = inputStream.pipe(PodcastTransformStream.create());    
+        const podcastTransformStream = inputStream.pipe(itemStream.create());    
         let rawStreamOutput = await toString(podcastTransformStream);
         parseString(rawStreamOutput, (err, result) => {
             Object.assign(parsedResult, result);

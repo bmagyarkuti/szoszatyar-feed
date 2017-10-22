@@ -5,7 +5,7 @@ const request = require('supertest');
 const sinon = require('sinon');
 const { Readable } = require('stream');
 const XmlResourceStream = require('../../lib/xml-resource-stream.js');
-const PodcastTransformStream = require('../../lib/podcast-transform-stream.js');
+const ItemStream = require('../../lib/itemStream.js');
 const server = require('../../app/web.js');
 
 describe('/feed.xml', function() {
@@ -19,25 +19,25 @@ describe('/feed.xml', function() {
                 this.push(null);
             }
         });
-        let fakePodcastTransformStream = 'fakePodcastTransformStream';
+        let fakeItemStream = 'fakePodcastTransformStream';
         let inputStreamStub = {
             pipe: sinon.stub()
-                .withArgs(fakePodcastTransformStream)
+                .withArgs(fakeItemStream)
                 .returns(fakeTransformStream)
         }
         sinon.stub(XmlResourceStream, 'create').withArgs({
              url: 'http://budling.hu/~kalman/arch/popular/szoszatyar/rss.xml',
             selector: 'endElement: channel > item'
         }).returns(inputStreamStub);
-        sinon.stub(PodcastTransformStream, 'create')
-            .returns(fakePodcastTransformStream);
+        sinon.stub(ItemStream, 'create')
+            .returns(fakeItemStream);
         
         response = await request(server.listen()).get('/feed.rss');  
     });
 
     after(function() {
         XmlResourceStream.create.restore();
-        PodcastTransformStream.create.restore();
+        ItemStream.create.restore();
     });
 
     it('returns 200', function() {
