@@ -24,6 +24,7 @@
     "sinon": "^3.3.0",
     "stream-to-string": "^1.1.0",
     "supertest": "^3.0.0",
+    "timekeeper": "^2.0.0",
     "xml2js": "^0.4.19"
   },
   "engines": {

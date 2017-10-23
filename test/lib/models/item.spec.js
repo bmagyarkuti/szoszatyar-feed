@@ -3,6 +3,7 @@ const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 const sinon = require('sinon');
+const timekeeper = require('timekeeper');
 
 const request = require('request-promise-native');
 
@@ -13,9 +14,36 @@ describe('Item', function() {
     
     before(async function() {
         await mongoWrapper.connect();
-    })
+    });
     beforeEach(async function() {
         await mongoWrapper.dropDatabase();
+    });
+
+    describe('.fetchLastBuildDate', async function(){
+        context('when the db is empty', async function() {
+            const currentTime = new Date('2017-01-01 00:00');
+            beforeEach(function() {
+                timekeeper.freeze(currentTime);
+            });
+            afterEach(function() {
+                timekeeper.reset();
+            });
+
+            it('returns current date', async function() {
+                expect(await Item.fetchLastBuildDate()).to.eql(currentTime.toUTCString());
+            })
+        });
+
+        context('when there are items in db', async function() {
+            beforeEach(async function() {
+                await (new Item({pubDate: 'Sun, 15 Oct 2017 10:27:23 GMT'})).save();
+                await (new Item({pubDate: 'Sat, 21 Oct 2017 9:34:12 GMT'})).save();
+            });
+
+            it('returns last items date', async function() {
+                expect(await Item.fetchLastBuildDate()).to.eql('Sat, 21 Oct 2017 09:34:12 GMT');
+            })
+        })
     });
 
     describe('.fetchOrDownloadSize', function() {

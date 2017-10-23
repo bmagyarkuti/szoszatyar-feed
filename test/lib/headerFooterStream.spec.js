@@ -5,15 +5,13 @@ const expect = require('chai').expect;
 const { parseString } = require('xml2js');
 const { Readable } = require('stream');
 const toString = require('stream-to-string');
+const sinon = require('sinon');
 
 const HeaderFooterStream = require('../../lib/headerFooterStream');
 const Item = require('../../lib/models/item');
-const mongoWrapper = require('../../lib/mongoWrapper').create();
 
-
-describe('PodcastTransformStream', function() {
-    const item1PubDate = 'Sat, 18 Feb 2017 12:33:36 GMT';
-    const item2PubDate = 'Sun, 15 Oct 2017 10:27:23 GMT';
+describe('HeaderFooterStream', function() {
+    const currentTime = 'Sat, 18 Feb 2017 12:33:36 GMT';
     const inputStream = new Readable({
         objectMode: false,
         read(size) {
@@ -25,11 +23,7 @@ describe('PodcastTransformStream', function() {
     let parsedResult = {};
 
     before(async function() {
-        await mongoWrapper.connect();
-
-        await (new Item({ pubDate: item1PubDate })).save();
-        await (new Item({ pubDate: item2PubDate })).save();
-
+        sinon.stub(Item, 'fetchLastBuildDate').resolves(currentTime);
         let rawStreamOutput = await toString(inputStream.pipe(HeaderFooterStream.create()));
         parseString(rawStreamOutput, (err, result) => {
             if (err) { throw err; }
@@ -37,8 +31,8 @@ describe('PodcastTransformStream', function() {
         });
     });
 
-    beforeEach(async function() {
-        await mongoWrapper.dropDatabase();
+    after(function() {
+        Item.fetchLastBuildDate.restore();
     });
 
     it('writes rss header', function() {
@@ -77,4 +71,8 @@ describe('PodcastTransformStream', function() {
     it('writes url tag to image', function() {
         expect(parsedResult.rss.channel[0].image[0].url[0]).to.eql(config.get('image.url'));
     });
+
+    it('writes lastBuildDate tag to channel', function() {
+        expect(parsedResult.rss.channel[0].lastBuildDate[0]).to.eql(currentTime)
+    })
 });
