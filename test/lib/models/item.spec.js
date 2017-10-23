@@ -75,7 +75,8 @@ describe('Item', function() {
             });
             
             it('returns correct pubDate', async function() {
-                expect(await Item.fetchOrDownloadPubDate(item.name)).to.eql(item.pubDate);
+                let the_item = await Item.fetchOrDownloadPubDate(item.name); 
+                expect(the_item).to.eql(item.pubDate);
             });            
         });
 
@@ -101,7 +102,7 @@ describe('Item', function() {
                 
                 expect(result.length).to.eql(1);
                 expect(result[0].name).to.eql(item.name);
-                expect(result[0].pubDate).to.eql(item.pubDate);
+                expect(result[0].pubDate.toUTCString()).to.eql(item.pubDate);
             })
         });
     })
