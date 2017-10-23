@@ -105,6 +105,10 @@ describe('PodcastTransformStream', function() {
         expect(parsedResult.rss.channel[0].item[0].link[0]).to.eql(item1.link);        
     });
 
+    it('writes guid tag to first item in channel', function() {
+        expect(parsedResult.rss.channel[0].item[0].guid[0]).to.eql(item1.link);        
+    });
+
     it('writes description tag to first item in channel', function() {
         expect(parsedResult.rss.channel[0].item[0].description[0]).to.eql(
             item1.description
