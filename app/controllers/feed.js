@@ -13,6 +13,8 @@ module.exports = async function(context) {
     });
 
     context.type = 'application/xml';
-    context.body = PipeCreator.create(inputStream);
+    PipeCreator.create(inputStream)
+        .pipe(context.res)       
     context.status = 200;
+    context.respond = false;
 }
