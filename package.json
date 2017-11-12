@@ -4,6 +4,7 @@
   "description": "This is an iTunes podcast adapter for the Szoszatyar RSS feed.",
   "main": "index.js",
   "scripts": {
+    "start": "docker-compose start && node app/index.js",
     "test": "NODE_ENV=test mocha \"test/**/*.spec.js\""
   },
   "author": "",

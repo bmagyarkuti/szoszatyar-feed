@@ -6,7 +6,8 @@ const MongoWrapper = require('../lib/mongoWrapper')
 const mongoWrapper = MongoWrapper.create();
 mongoWrapper.connect()
     .then(() => {
-        app.listen(process.env.PORT || 3000);    
+        app.listen(process.env.PORT || 3000);
+        console.log("Listening on", process.env.PORT || 3000);    
     })
     .catch(err => {
         console.log(err);
