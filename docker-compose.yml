@@ -1,4 +1,19 @@
-MongoDB:
-  image: mongo:latest
-  ports:
-    - 27017:27017
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+  dev:
+    build: .
+    volumes:
+      - ".:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    ports:
+      - "5000:5000"
+    command: npm run dev
+    environment:
+      - PORT=5000
+    depends_on:
+      - mongo

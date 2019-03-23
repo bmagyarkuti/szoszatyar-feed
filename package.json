@@ -4,7 +4,7 @@
   "description": "This is an iTunes podcast adapter for the Szoszatyar RSS feed.",
   "main": "index.js",
   "scripts": {
-    "start": "docker-compose start && node app/index.js",
+    "dev": "nodemon app/index.js",
     "test": "NODE_ENV=test mocha --exit \"test/**/*.spec.js\""
   },
   "author": "",
@@ -21,13 +21,14 @@
     "xml-writer": "^1.7.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "mocha": "^4.0.1",
-    "sinon": "^4.1.3",
-    "stream-to-string": "^1.1.0",
-    "supertest": "^3.0.0",
-    "timekeeper": "^2.0.0",
+    "mocha": "^4.1.0",
+    "nodemon": "^1.18.10",
+    "sinon": "^4.5.0",
+    "stream-to-string": "^1.2.0",
+    "supertest": "^3.4.2",
+    "timekeeper": "^2.2.0",
     "xml2js": "^0.4.19"
   },
   "engines": {
