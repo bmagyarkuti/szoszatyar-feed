@@ -1,5 +1,5 @@
 {
     "Mongo": {
-        "connectionString": "mongodb://localhost/test"
+        "connectionString": "mongodb://mongo/test"
     }
 }
