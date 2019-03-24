@@ -1,5 +1,6 @@
 {
     "Mongo": {
+        "host": "mongo",
         "connectionString": "mongodb://mongo/test"
     }
 }

@@ -20,10 +20,10 @@ describe('MongoWrapper', function() {
         });
 
         it('fails connecting to db on nonexistent port', async function() {
-            let connectionString = "mongodb://mongo:91234/";
+            let connectionString = `mongodb://${config.get('Mongo.host')}:91234/test`;
             let mongoWrapper = new MongoWrapper(connectionString, mongoose);
             
-            return expect(mongoWrapper.connect()).to.be.rejectedWith('invalid port (larger than 65535) with hostname');
+            return expect(mongoWrapper.connect()).to.be.rejectedWith('Invalid port (larger than 65535) with hostname');
         });
     });
 
@@ -41,7 +41,7 @@ describe('MongoWrapper', function() {
         it('drops the database', async function() {
             await mongoWrapper.dropDatabase();
 
-            expect(await Item.find().count()).to.eql(0);
+            expect(await Item.find().countDocuments()).to.eql(0);
         });
     })
 });
