@@ -7,7 +7,6 @@ services:
     build: .
     volumes:
       - ".:/usr/src/app"
-      - "/usr/src/app/node_modules"
     command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
       - PORT=5000
