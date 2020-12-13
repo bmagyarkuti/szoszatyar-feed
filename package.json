@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app/index.js",
-    "test": "NODE_ENV=test mocha --exit \"test/**/*.spec.js\"",
-    "docker-test": "docker-compose up --exit-code-from test test"
+    "test": "NODE_ENV=test mocha --exit \"test/**/*.spec.js\""
   },
   "author": "",
   "license": "ISC",
