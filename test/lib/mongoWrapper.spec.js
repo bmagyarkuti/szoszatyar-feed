@@ -15,14 +15,14 @@ describe('MongoWrapper', function() {
     describe('.connect', function() {
         it('successfully connects to existing database', async function() {
             let mongoWrapper = new MongoWrapper(config.get('Mongo.connectionString'), mongoose);
-            
+            await mongoWrapper.disconnect();
             return expect(mongoWrapper.connect()).to.be.fulfilled;
         });
 
         it('fails connecting to db on nonexistent port', async function() {
             let connectionString = `mongodb://${config.get('Mongo.host')}:91234/test`;
             let mongoWrapper = new MongoWrapper(connectionString, mongoose);
-            
+            await mongoWrapper.disconnect();
             return expect(mongoWrapper.connect()).to.be.rejectedWith('Invalid port (larger than 65535) with hostname');
         });
     });
